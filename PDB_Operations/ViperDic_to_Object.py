@@ -6,23 +6,24 @@ class ViperToObject:
         viperobj.vdb = viperdic['viperdb']['@entry_id']
         viperobj.entryKey = viperdic['viperdb']['@entry_key']
         viperobj.SIC = viperdic['viperdb']['@SIC']
-        viperobj.subunits = self.parse_subunits(  viperdic['viperdb']['subunit'])
+        viperobj.subunits = self.parse_subunits(  viperdic['viperdb']['subunit'],viperobj)
 
         return viperobj
 
-    def parse_subunits(self,subunitData):
+    def parse_subunits(self,subunitData,objvirus):
         subunitArray = []
         for subunit in subunitData:
-            objSubunit= Data_Objects.SubUnit()
+            objSubunit= Data_Objects.SubUnit(objvirus)
+
             objSubunit.subunitName = subunit['@n']
-            objSubunit.residues= self.parce_residues(subunit)
+            objSubunit.residues= self.parce_residues(subunit,objSubunit)
             subunitArray.append(objSubunit)
         return subunitArray
 
-    def parce_residues(self, subunitRes):
+    def parce_residues(self, subunitRes,objSubunit):
         residuesArray =[]
         for res in subunitRes['datamarker']:
-            objRes = Data_Objects.Residues()
+            objRes = Data_Objects.Residues(objSubunit)
             objRes.x = int(res['@x'])
             objRes.y = int(res['@y'])
 
